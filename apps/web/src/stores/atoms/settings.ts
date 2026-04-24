@@ -15,6 +15,7 @@ import {
   profilesSchemaForLoad,
 } from "../schemas/settings";
 import { focusAtom } from "jotai-optics";
+import { applyS3EnvOverrides } from "@/lib/env/runtime-config";
 
 enableMapSet();
 
@@ -138,8 +139,13 @@ const uploadSettingsAtom = focusAtom(optionsAtom, (optic) =>
   optic.prop("upload"),
 );
 
-const validS3SettingsAtom = atom((get) => {
+const effectiveS3SettingsAtom = atom((get) => {
   const settings = get(s3SettingsAtom);
+  return applyS3EnvOverrides(settings);
+});
+
+const validS3SettingsAtom = atom((get) => {
+  const settings = get(effectiveS3SettingsAtom);
   const result = optionsSchema.shape.s3.safeParse(settings);
   if (result.success) {
     return result.data;
@@ -152,6 +158,7 @@ export {
   settingsForSyncAtom,
   optionsAtom,
   s3SettingsAtom,
+  effectiveS3SettingsAtom,
   gallerySettingsAtom,
   uploadSettingsAtom,
   validS3SettingsAtom,

@@ -33,6 +33,32 @@ For obtaining S3 related keys, please refer to the documentation of your storage
 
 You can also customize this application to a certain extent. Go to the `Settings` page and you can configure some important options.
 
+## Environment Variables
+
+You can define environment variables in `apps/web/.env` (or your deployment platform env settings).
+
+### Access Password (Optional)
+
+- `VITE_ACCESS_PASSWORD`
+- If this value is missing or an empty string, the app is accessible without password verification.
+- This is a frontend access gate. For strict perimeter protection, use reverse proxy auth (e.g., Nginx/Cloudflare Access).
+
+### S3 Settings Overrides (Optional)
+
+If any variable below is set, it takes precedence over values configured in the Settings UI / local storage. If unset, existing behavior is kept.  
+String variables are `trim`med; if the result is an empty string, they are treated as unset.
+
+| Variable | Meaning | Value (examples) | Notes |
+| --- | --- | --- | --- |
+| `VITE_S3_ENDPOINT` | S3 API endpoint | `https://s3.amazonaws.com` / `https://<accountid>.r2.cloudflarestorage.com` | Must be a full URL with protocol. |
+| `VITE_S3_BUCKET` | Bucket name | `my-bucket` | Usually without slashes. |
+| `VITE_S3_REGION` | Region | `us-east-1` / `auto` (common for R2) | Follow your provider's requirement. |
+| `VITE_S3_ACCESS_KEY_ID` | Access Key ID | `AKIA...` | Credential for bucket access. |
+| `VITE_S3_SECRET_ACCESS_KEY` | Secret Access Key | `xxxxx` | Credential for bucket access. |
+| `VITE_S3_FORCE_PATH_STYLE` | Force path-style API | `true` / `false` (also supports `1`/`0`, `yes`/`no`, `on`/`off`, case-insensitive) | Invalid values are ignored and existing behavior is kept. |
+| `VITE_S3_PUBLIC_URL` | Public URL prefix used to build image URLs | `https://cdn.example.com` | Final URL format is `public-url/object-key`. |
+| `VITE_S3_INCLUDE_PATH` | **Object-list prefix filter** (only list objects under a prefix) | `images/`, `2026/04/` | Affects listing scope only; does not change uploaded object keys. Empty means no filter. Prefer key prefixes without leading `/`, usually ending with `/`. |
+
 ## Feedback and Contributions
 
 Feel free to raise an [Issue](https://github.com/yy4382/s3-image-port/issues/new/choose) if you encounter any problems or have suggestions.

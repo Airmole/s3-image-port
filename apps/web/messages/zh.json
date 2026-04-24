@@ -11,6 +11,13 @@
     "getStarted": "开始使用",
     "readDocs": "阅读文档"
   },
+  "accessGuard": {
+    "title": "访问受限",
+    "description": "当前站点受访问密码保护，请先输入密码。",
+    "passwordLabel": "访问密码",
+    "invalidPassword": "密码错误，请重试。",
+    "submit": "解锁"
+  },
   "settings": {
     "title": "设置",
     "profilesName": "配置",

@@ -40,6 +40,32 @@ S3 Image Port 是一个控制面板，用于管理 AWS S3 存储桶或 S3 兼容
 
 您也可以在一定程度上自定义此应用面板。进入 "设置 "页面，您可以配置一些重要选项。
 
+## 环境变量
+
+您可以在 `apps/web/.env`（或部署平台的环境变量配置）中设置以下变量。
+
+### 访问密码（可选）
+
+- `VITE_ACCESS_PASSWORD`
+- 如果未设置该变量或值为空字符串，则访问应用时不需要密码验证。
+- 该能力属于前端侧访问门禁。如需更严格的外围访问控制，建议结合反向代理鉴权（如 Nginx/Cloudflare Access）。
+
+### S3 配置覆盖（可选）
+
+如果设置了以下任一变量，会优先使用环境变量值；未设置时沿用当前设置页面 / 本地存储中的已有逻辑。  
+字符串变量会先 `trim`（去除首尾空格）；如果结果为空字符串，会视为“未设置”并回退到现有逻辑。
+
+| 变量名 | 含义 | 参数值（示例） | 备注 |
+| --- | --- | --- | --- |
+| `VITE_S3_ENDPOINT` | S3 API Endpoint | `https://s3.amazonaws.com` / `https://<accountid>.r2.cloudflarestorage.com` | 必须是完整 URL（含协议）。 |
+| `VITE_S3_BUCKET` | 存储桶名称 | `my-bucket` | 通常不带斜杠。 |
+| `VITE_S3_REGION` | 区域 | `us-east-1` / `auto`（R2 常见） | 取值以对应云厂商要求为准。 |
+| `VITE_S3_ACCESS_KEY_ID` | Access Key ID | `AKIA...` | 用于访问桶的凭证。 |
+| `VITE_S3_SECRET_ACCESS_KEY` | Secret Access Key | `xxxxx` | 用于访问桶的凭证。 |
+| `VITE_S3_FORCE_PATH_STYLE` | 是否强制使用 Path Style API | `true` / `false`（也支持 `1`/`0`、`yes`/`no`、`on`/`off`，不区分大小写） | 值非法时会被忽略并回退现有逻辑。 |
+| `VITE_S3_PUBLIC_URL` | 图片公开访问 URL 前缀 | `https://cdn.example.com` | 最终图片地址为 `public-url/object-key`。 |
+| `VITE_S3_INCLUDE_PATH` | **对象列表过滤前缀**（只列出指定前缀下的对象） | `images/`、`2026/04/` | 仅影响“列表/展示范围”，不改变上传文件 key；留空表示不过滤。建议使用不带前导 `/` 的 key 前缀，通常以 `/` 结尾。 |
+
 ## 反馈和贡献
 
 如果您遇到任何问题或有任何建议，请随时提出 [Issue](https://github.com/yy4382/s3-image-port/issues/new/choose)。

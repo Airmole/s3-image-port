@@ -3,6 +3,7 @@ import { createFileRoute, notFound, Outlet } from "@tanstack/react-router";
 import { IntlProvider } from "use-intl";
 import { createHeadTags } from "../../lib/seo";
 import { RemoteChangeDetector } from "@/modules/settings/sync/components/global/detect-remote-change";
+import { AccessGate } from "@/components/access/access-gate";
 
 export const Route = createFileRoute("/$locale")({
   loader: async (ctx) => {
@@ -32,8 +33,10 @@ function RouteComponent() {
       messages={messages}
       timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
     >
-      <Outlet />
-      <RemoteChangeDetector />
+      <AccessGate>
+        <Outlet />
+        <RemoteChangeDetector />
+      </AccessGate>
     </IntlProvider>
   );
 }

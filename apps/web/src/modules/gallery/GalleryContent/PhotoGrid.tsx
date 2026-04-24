@@ -19,7 +19,7 @@ import { PhotoItem } from "./PhotoItem/PhotoItem";
 import { useTranslations } from "use-intl";
 import { Loader2 } from "lucide-react";
 import { selectedPhotosAtom, currentPageAtom } from "@/stores/atoms/gallery";
-import { s3SettingsAtom } from "@/stores/atoms/settings";
+import { effectiveS3SettingsAtom } from "@/stores/atoms/settings";
 import { Link } from "@tanstack/react-router";
 
 export function PhotoGrid() {
@@ -101,7 +101,7 @@ export function PhotoGrid() {
 function PhotoGridEmpty() {
   const t = useTranslations("gallery.grid");
   const { fetchPhotoList, isLoading } = useFetchPhotoList();
-  const s3Settings = useAtomValue(s3SettingsAtom);
+  const s3Settings = useAtomValue(effectiveS3SettingsAtom);
   const hasIncludePath = s3Settings.includePath.length > 0;
 
   return (

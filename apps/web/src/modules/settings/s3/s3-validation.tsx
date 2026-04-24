@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { s3SettingsAtom } from "@/stores/atoms/settings";
+import { effectiveS3SettingsAtom } from "@/stores/atoms/settings";
 import { optionsSchema } from "@/stores/schemas/settings";
 import {
   Loader2,
@@ -212,7 +212,7 @@ function TestButton({
 // S3验证主组件
 export function S3Validation() {
   const t = useTranslations("settings.s3Validation");
-  const s3Settings = useAtomValue(s3SettingsAtom);
+  const s3Settings = useAtomValue(effectiveS3SettingsAtom);
   const [validationStatus, setValidationStatus] = useState<ValidationStatus>({
     status: "idle",
   });
